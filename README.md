@@ -17,7 +17,6 @@ This class work covered four distinct scenarios, focusing on core database devel
     * **Trigger 1 (`trg_AccessEnforcer`):** Fired `BEFORE` DML. It checked the `SYSDATE` (day and hour) and raised an application error (`ORA-20001`) to block the transaction immediately if a violation occurred.
     * **Trigger 2 (`trg_AccessLogger`):** Fired `AFTER` DML. It was defined with `AUTONOMOUS_TRANSACTION`. If a violation was detected (implying Trigger 1 fired and the transaction would fail), this trigger inserted the violation details into `AccessViolations` and executed an independent **`COMMIT`** to save the log, ensuring the audit trail survived the main transaction's rollback.
 
----
 
 ### II. HR Employee Management System (Packages & Security) 
 
@@ -32,7 +31,6 @@ This class work covered four distinct scenarios, focusing on core database devel
     * `execute_hr_dml`: Used **Dynamic SQL (`EXECUTE IMMEDIATE`)** to accept a DML string (`UPDATE`, `INSERT`, etc.) as input, allowing flexible HR operations while ensuring the code compiled statically.
 * **Security Context:** The procedure demonstrated the difference between **`USER`** (the owner/Definer of the package) and **`CURRENT_USER`** (the Invoker/Executor of the package).
 
----
 
 ### III. Suspicious Login Monitoring (Advanced Triggers) 
 
@@ -45,7 +43,6 @@ This class work covered four distinct scenarios, focusing on core database devel
     * **Alerting:** If the count was $\ge 3$, the trigger, operating under **`PRAGMA AUTONOMOUS_TRANSACTION`**, inserted a new record into `SECURITY_ALERTS` and executed an independent **`COMMIT`**.
     * **Optional:** A second trigger was outlined to demonstrate how to use `UTL_MAIL` to send an external email notification whenever a record was inserted into `SECURITY_ALERTS`.
 
----
 
 ### IV. Hospital Management (Bulk Processing) 🩺
 
