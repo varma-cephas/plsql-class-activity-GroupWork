@@ -16,6 +16,8 @@ This class work covered four distinct scenarios, focusing on core database devel
 * **Solution:** Two separate PL/SQL triggers were created, linked by the critical **`PRAGMA AUTONOMOUS_TRANSACTION`** to handle the "Rollback Paradox."
     * **Trigger 1 (`trg_AccessEnforcer`):** Fired `BEFORE` DML. It checked the `SYSDATE` (day and hour) and raised an application error (`ORA-20001`) to block the transaction immediately if a violation occurred.
     * **Trigger 2 (`trg_AccessLogger`):** Fired `AFTER` DML. It was defined with `AUTONOMOUS_TRANSACTION`. If a violation was detected (implying Trigger 1 fired and the transaction would fail), this trigger inserted the violation details into `AccessViolations` and executed an independent **`COMMIT`** to save the log, ensuring the audit trail survived the main transaction's rollback.
+    ![Alt text](./screenshots/question1_a.png "question1") 
+    ![Alt text](./screenshots/question1_b.png "question1") 
 
 
 ### II. HR Employee Management System (Packages & Security) 
@@ -30,7 +32,9 @@ This class work covered four distinct scenarios, focusing on core database devel
 * **Procedure:**
     * `execute_hr_dml`: Used **Dynamic SQL (`EXECUTE IMMEDIATE`)** to accept a DML string (`UPDATE`, `INSERT`, etc.) as input, allowing flexible HR operations while ensuring the code compiled statically.
 * **Security Context:** The procedure demonstrated the difference between **`USER`** (the owner/Definer of the package) and **`CURRENT_USER`** (the Invoker/Executor of the package).
-
+    ![Alt text](./screenshots/question2_a.png "question2") 
+    ![Alt text](./screenshots/question2_b1.png "question2") 
+    ![Alt text](./screenshots/question2_b2.png "question2") 
 
 ### III. Suspicious Login Monitoring (Advanced Triggers) 
 
@@ -42,9 +46,11 @@ This class work covered four distinct scenarios, focusing on core database devel
     * **Logic:** The trigger checked if the inserted record's status was 'FAILED'. If so, it performed a **`COUNT(*)`** query on `LOGIN_AUDIT` for the same user on the current day (`TRUNC(SYSTIMESTAMP)`).
     * **Alerting:** If the count was $\ge 3$, the trigger, operating under **`PRAGMA AUTONOMOUS_TRANSACTION`**, inserted a new record into `SECURITY_ALERTS` and executed an independent **`COMMIT`**.
     * **Optional:** A second trigger was outlined to demonstrate how to use `UTL_MAIL` to send an external email notification whenever a record was inserted into `SECURITY_ALERTS`.
+    ![Alt text](./screenshots/question3_a1.png "question3") 
+    ![Alt text](./screenshots/question3_a2.png "question3") 
 
 
-### IV. Hospital Management (Bulk Processing) 🩺
+### IV. Hospital Management (Bulk Processing)
 
 **Overview:** The requirement was to design a package for efficient patient management, utilizing collections and bulk processing for high-volume data operations.
 
@@ -57,3 +63,6 @@ This class work covered four distinct scenarios, focusing on core database devel
     * `admit_patient`: Updated the `admitted_status` for a single patient.
     * `count_admitted`: A function to return the total number of admitted patients.
     * `show_all_patients`: A function that returns a **`SYS_REFCURSOR`**, allowing the calling application to fetch and display the full patient list efficiently.
+    ![Alt text](./screenshots/question4_a.png "question4") 
+    ![Alt text](./screenshots/question4_b1.png "question4") 
+    ![Alt text](./screenshots/question4_b2.png "question4") 
