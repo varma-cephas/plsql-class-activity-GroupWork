@@ -1,5 +1,5 @@
 # plsql-class-activity-GroupWork
-PL/SQL class Activity GroupWork
+PL/SQL Activity GroupWork
 
 ## Classwork Summary: Advanced PL/SQL & Database Security Implementation
 
